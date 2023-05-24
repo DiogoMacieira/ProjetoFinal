@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  name      String
+  email     String    @unique @db.VarChar(255)
+  password  String    @db.VarChar(255)
+  cargo     String
+  deleted   Boolean   @default(false)
+  profile   Profile?
+  reservas  Reserva[]
+}
+
+model Reserva {
+  id            Int      @id @default(autoincrement())
+  data          DateTime
+  numeroPessoas Int
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String
+}
+
+model Menu {
+  id        Int        @id @default(autoincrement())
+  nome      String
+  preco     Float
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  items     Produtos[]
+}
+
+model Produtos {
+  id        Int     @id @default(autoincrement())
+  nome      String
+  descricao String?
+  menuId    Int
+  menu      Menu    @relation(fields: [menuId], references: [id])
+  Pedido    Pedido? @relation(fields: [pedidoId], references: [id])
+  pedidoId  Int?
+}
+
+model Mesa {
+  id       Int        @id @default(autoincrement())
+  numero   Int        @unique
+  estado   String // Available, Occupied, Reserved
+  waiter   Empregado? @relation(fields: [waiterId], references: [id])
+  waiterId Int?
+  Pedido   Pedido[]
+}
+
+model Pedido {
+  id        Int        @id @default(autoincrement())
+  mesa      Mesa       @relation(fields: [mesaId], references: [id])
+  mesaId    Int
+  waiter    Empregado  @relation(fields: [waiterId], references: [id])
+  waiterId  Int
+  items     Produtos[]
+  createdAt DateTime   @default(now())
+  Invoice   Invoice[]
+}
+
+model Invoice {
+  id            Int      @id @default(autoincrement())
+  customerEmail String
+  order         Pedido   @relation(fields: [orderId], references: [id])
+  orderId       Int
+  createdAt     DateTime @default(now())
+}
+
+model Empregado {
+  id      Int      @id @default(autoincrement())
+  nome    String
+  pedidos Pedido[]
+  mesas   Mesa[]
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  firstName String   @db.VarChar(255)
+  lastName  String?  @db.VarChar(255)
+  bio       String?  @db.Text()
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
