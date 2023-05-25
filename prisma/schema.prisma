@@ -51,8 +51,6 @@ model Mesa {
   id       Int        @id @default(autoincrement())
   numero   Int        @unique
   estado   String // Available, Occupied, Reserved
-  waiter   Empregado? @relation(fields: [waiterId], references: [id])
-  waiterId Int?
   Pedido   Pedido[]
 }
 
@@ -79,7 +77,6 @@ model Empregado {
   id      Int      @id @default(autoincrement())
   nome    String
   pedidos Pedido[]
-  mesas   Mesa[]
 }
 
 model Profile {
