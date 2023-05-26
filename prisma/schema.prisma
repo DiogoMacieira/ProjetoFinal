@@ -26,6 +26,7 @@ model Reserva {
   numeroPessoas Int
   user          User     @relation(fields: [userId], references: [id])
   userId        String
+  deleted   Boolean    @default(false)
 }
 
 model Menu {
@@ -34,6 +35,7 @@ model Menu {
   preco     Float
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  deleted   Boolean    @default(false)
   items     Produtos[]
 }
 
@@ -45,6 +47,7 @@ model Produtos {
   menu      Menu    @relation(fields: [menuId], references: [id])
   Pedido    Pedido? @relation(fields: [pedidoId], references: [id])
   pedidoId  Int?
+  deleted   Boolean    @default(false)
 }
 
 model Mesa {
@@ -52,6 +55,7 @@ model Mesa {
   numero   Int        @unique
   estado   String // Available, Occupied, Reserved
   Pedido   Pedido[]
+  deleted   Boolean    @default(false)
 }
 
 model Pedido {
@@ -63,6 +67,7 @@ model Pedido {
   items     Produtos[]
   createdAt DateTime   @default(now())
   Invoice   Invoice[]
+  deleted   Boolean    @default(false)
 }
 
 model Invoice {
@@ -77,6 +82,7 @@ model Empregado {
   id      Int      @id @default(autoincrement())
   nome    String
   pedidos Pedido[]
+  deleted   Boolean    @default(false)
 }
 
 model Profile {

@@ -1,9 +1,9 @@
-import { PrismaClient, Utente } from "@prisma/client";
+import { PrismaClient, Menu } from "@prisma/client";
 
 export const prisma = new PrismaClient();
 
 const all = () =>
-  prisma.utente.findMany({
+  prisma.menu.findMany({
     where: {
       deleted: false,
     },
@@ -12,11 +12,11 @@ const all = () =>
 const add = (
   nome: string,
   idade: string,
-  genero:string,
-  morada:string,
-  contato: string,
+  genero: string,
+  morada: string,
+  contato: string
 ) =>
-  prisma.utente.create({
+  prisma.menu.create({
     data: {
       nome,
       idade,
@@ -27,25 +27,25 @@ const add = (
   });
 
 const remove = (id: string) =>
-  prisma.utente.update({
+  prisma.menu.update({
     where: { id },
     data: {
       deleted: true,
     },
   });
 
-  const update = (id: string, utente: Utente) =>
-  prisma.utente.update({
-    where: { id },
-    data: utente,
-  });
+  const update = (id: string, menu: Menu) =>
+    prisma.menu.update({
+      where: { id },
+      data: menu,
+    });
 
   const detail = (id: string) =>
-  prisma.utente.findFirst({
-    where: {
-      id,
-      deleted: false,
-    },
-  });
+    prisma.menu.findFirst({
+      where: {
+        id,
+        deleted: false,
+      },
+    });
 
 export { all, add, remove,update ,detail};
