@@ -1,30 +1,26 @@
-import { PrismaClient, Consulta } from "@prisma/client";
+import { PrismaClient, Reserva } from "@prisma/client";
 import dayjs from "dayjs";
 export const prisma = new PrismaClient();
 
 const all = () =>
-  prisma.consulta.findMany({
+  prisma.reserva.findMany({
     where: {
       deleted: false,
     },
   });
 
 const add = async (
-  datahora: Date,
-  nomeMedico: string,
-  nomeUtente: string,
-  especialidade: string,
-  observacoes: string,
-  sala: string
+  data: Date,
+  numeroPessoas: string,
+  nome: string,
+  emailId: string,
 ) => {
-  const consulta = await prisma.consulta.create({
+  const consulta = await prisma.reserva.create({
     data: {
-      datahora: dayjs(datahora).format("YYYY-MM-DDTHH:mm:ss.SSSZ"),
-      NomeMedico: nomeMedico,
-      NomeUtente: nomeUtente,
-      especialidade,
-      sala,
-      observacoes,
+      data: dayjs(data).format("YYYY-MM-DDTHH:mm:ss.SSSZ"),
+      NumeroPessoas: numeroPessoas,
+      Nome: nome,
+      Email:emailId,
     },
   });
 
@@ -32,21 +28,21 @@ const add = async (
 };
 
 const remove = (id: string) =>
-  prisma.consulta.update({
+  prisma.reserva.update({
     where: { id },
     data: {
       deleted: true,
     },
   });
 
-const update = (id: string, consulta: Consulta) =>
-  prisma.consulta.update({
+const update = (id: string, reserva: Reserva) =>
+  prisma.reserva.update({
     where: { id },
-    data: consulta,
+    data: reserva,
   });
 
 const detail = (id: string) =>
-  prisma.consulta.findFirst({
+  prisma.reserva.findFirst({
     where: {
       id,
       deleted: false,

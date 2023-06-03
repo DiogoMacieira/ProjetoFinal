@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Admin {
+model User {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -19,14 +19,16 @@ model Admin {
 }
 
 model Empregado {
-  id      Int      @id @default(autoincrement())
+  id        String       @id @default(uuid())
   nome    String
+  email     String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(255)
   pedidos Pedido[]
   deleted Boolean  @default(false)
 }
 
 model Cliente {
-  id        Int       @id @default(autoincrement())
+  id        String       @id @default(uuid())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   nome      String
@@ -36,9 +38,9 @@ model Cliente {
 }
 
 model Reserva {
-  id            Int      @id @default(autoincrement())
+  id            String      @id @default(uuid())
   data          DateTime
-  numeroPessoas Int
+  numeroPessoas String
   nome          String
   emailId       String
   email         Cliente?  @relation(fields: [emailId], references: [email])
@@ -46,7 +48,7 @@ model Reserva {
 }
 
 model Menu {
-  id        Int        @id @default(autoincrement())
+  id        String       @id @default(uuid())
   nome      String
   preco     Float
   createdAt DateTime   @default(now())
@@ -56,10 +58,10 @@ model Menu {
 }
 
 model Produtos {
-  id        Int     @id @default(autoincrement())
+  id        String       @id @default(uuid())
   nome      String
   descricao String?
-  menuId    Int
+  menuId    String
   menu      Menu    @relation(fields: [menuId], references: [id])
   pedido    Pedido? @relation(fields: [pedidoId], references: [id])
   pedidoId  Int?
@@ -67,7 +69,7 @@ model Produtos {
 }
 
 model Mesa {
-  id      Int      @id @default(autoincrement())
+  id        String       @id @default(uuid())
   numero  Int      @unique
   estado  String // Available, Occupied, Reserved
   Pedido  Pedido[]
@@ -76,10 +78,10 @@ model Mesa {
 
 model Pedido {
   id        Int        @id @default(autoincrement())
+  mesaId    String
   mesa      Mesa       @relation(fields: [mesaId], references: [id])
-  mesaId    Int
+  waiterId  String
   waiter    Empregado  @relation(fields: [waiterId], references: [id])
-  waiterId  Int
   items     Produtos[]
   createdAt DateTime   @default(now())
   Invoice   Invoice[]
@@ -103,5 +105,5 @@ model Profile {
   lastName  String?  @db.VarChar(255)
   bio       String?  @db.Text()
   userId    String   @unique
-  user      Admin    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
