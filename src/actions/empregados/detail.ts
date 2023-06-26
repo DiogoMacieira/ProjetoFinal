@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
-import { detail } from "../../services/utente";
+import { detail } from "../../services/empregado";
 
 export default async (request: Request, response: Response) => {
   const { id } = request.params;
 
-  const utente = await detail(String(id));
+  const empregado = await detail(String(id));
 
-  if (!utente) {
+  if (!empregado) {
     return response.status(404).json({
       code: 404,
-      message: "Utente not found",
+      message: "Empregado not found",
     });
   }
 
-  return response.json(utente);
+  return response.json(empregado);
 };

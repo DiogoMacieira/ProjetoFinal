@@ -10,22 +10,29 @@ const all = () =>
   });
 
 const add = async (
-  data: Date,
-  numeroPessoas: string,
   nome: string,
-  emailId: string,
+  email: string,
+  numeroPessoas: string,
+  data: Date,
 ) => {
   const consulta = await prisma.reserva.create({
     data: {
+      nome: nome,
+      email: {
+        create: {
+          nome: nome,
+          email: email,
+        },
+      },
+      numeroPessoas: numeroPessoas,
       data: dayjs(data).format("YYYY-MM-DDTHH:mm:ss.SSSZ"),
-      NumeroPessoas: numeroPessoas,
-      Nome: nome,
-      Email:emailId,
     },
   });
 
   return consulta;
 };
+
+export default add;
 
 const remove = (id: string) =>
   prisma.reserva.update({

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { add } from "../../services/utente";
+import { add } from "../../services/menu";
 
 export default async (request: Request, response: Response) => {
-  const { nome,idade,genero,morada,contato } = request.body;
+  const { nome,preco } = request.body;
 
-  const newUtente = await add(nome, idade, genero, morada, contato);
+  const newMenu = await add(nome, preco);
 
-  return response.json(newUtente);
+  return response.json(newMenu);
 };

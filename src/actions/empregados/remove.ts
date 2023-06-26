@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { remove, detail } from "../../services/utente";
+import { remove, detail } from "../../services/empregado";
 
 export default async (request: Request, response: Response) => {
   const { id } = request.params;
@@ -7,7 +7,7 @@ export default async (request: Request, response: Response) => {
   if (!(await detail(String(id)))) {
     return response.status(404).json({
       code: 404,
-      message: "Utente not found",
+      message: "Empregado not found",
     });
   }
 

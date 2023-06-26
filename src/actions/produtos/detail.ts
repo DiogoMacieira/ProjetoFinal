@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
-import { detail } from "../../services/consultas";
+import { detail } from "../../services/produto";
 
 export default async (request: Request, response: Response) => {
   const { id } = request.params;
 
-  const consulta = await detail(String(id));
+  const produto = await detail(String(id));
 
-  if (!consulta) {
+  if (!produto) {
     return response.status(404).json({
       code: 404,
-      message: "Consulta not found",
+      message: "Produto not found",
     });
   }
 
-  return response.json(consulta);
+  return response.json(produto);
 };

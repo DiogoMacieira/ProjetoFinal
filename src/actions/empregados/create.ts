@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { add } from "../../services/utente";
+import { add } from "../../services/empregado";
 
 export default async (request: Request, response: Response) => {
-  const { nome,idade,genero,morada,contato } = request.body;
+  const { nome,email,password } = request.body;
 
-  const newUtente = await add(nome, idade, genero, morada, contato);
+  const newEmpregado = await add(nome,email,password);
 
-  return response.json(newUtente);
+  return response.json(newEmpregado);
 };
