@@ -71,29 +71,30 @@ model Produtos {
 model Mesa {
   id      String   @id @default(uuid())
   numero  Int      @unique
-  estado  String // Available, Occupied, Reserved
   Pedido  Pedido[]
   deleted Boolean  @default(false)
 }
 
 model Pedido {
-  id        Int        @id @default(autoincrement())
-  mesaId    String
-  mesa      Mesa       @relation(fields: [mesaId], references: [id])
-  waiterId  String
-  waiter    Empregado  @relation(fields: [waiterId], references: [id])
-  items     Produtos[]
-  createdAt DateTime   @default(now())
-  Invoice   Invoice[]
-  deleted   Boolean    @default(false)
+  id                 Int               @id @default(autoincrement())
+  mesaId             String
+  mesa               Mesa              @relation(fields: [mesaId], references: [id])
+  waiterId           String
+  waiter             Empregado         @relation(fields: [waiterId], references: [id])
+  items              Produtos[]
+  createdAt          DateTime          @default(now())
+  deleted            Boolean           @default(false)
+  EmpregadoCozinha   EmpregadoCozinha? @relation("EmpregadoCozinhaPedidos", fields: [empregadoCozinhaId], references: [id])
+  empregadoCozinhaId String?
 }
 
-model Invoice {
-  id            Int      @id @default(autoincrement())
-  customerEmail String
-  order         Pedido   @relation(fields: [orderId], references: [id])
-  orderId       Int
-  createdAt     DateTime @default(now())
+model EmpregadoCozinha {
+  id       String   @id @default(uuid())
+  nome     String
+  email    String   @unique @db.VarChar(255)
+  password String   @db.VarChar(255)
+  pedidos  Pedido[] @relation("EmpregadoCozinhaPedidos")
+  deleted  Boolean  @default(false)
 }
 
 model Profile {
