@@ -1,5 +1,5 @@
 import express from "express";
-import { list, detail, create, remove, update } from "../actions/consultas";
+import { list, detail, create, remove, update } from "../actions/reservas";
 
 const router = express.Router();
 
